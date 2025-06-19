@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">📊 Мои лимиты по категориям</h2>
+
+  {% if limits %}
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Категория</th>
+          <th>Тип лимита</th>
+          <th>Сумма</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for limit in limits %}
+        <tr>
+          <td>{{ limit.category.name }}</td>
+          <td>{{ limit.get_limit_type_display }}</td>
+          <td>{{ limit.limit|floatformat:0 }} ₽</td>
+          <td>
+            <a href="{% url 'edit_limit' limit.id %}" class="btn btn-sm btn-outline-primary">✏️</a>
+            <a href="{% url 'delete_limit' limit.id %}" class="btn btn-sm btn-outline-danger"
+               onclick="return confirm('Удалить лимит на {{ limit.category.name }}?');">🗑️</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>⚠️ У вас пока нет установленных лимитов.</p>
+  {% endif %}
+
+  <div class="mt-4">
+    <a href="{% url 'set_category_limit' %}" class="btn btn-success">➕ Добавить лимит</a>
+  </div>
+</div>
+{% endblock %}
+

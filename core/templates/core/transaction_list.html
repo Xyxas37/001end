@@ -1,0 +1,77 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4">💰 Ваши операции</h2>
+
+  <div class="mb-3">
+    <a href="{% url 'add_transaction' %}" class="btn btn-success">➕ Добавить операцию</a>
+  </div>
+
+  <form method="get" class="row g-3 mb-4">
+    <div class="col-md-3">
+      <label for="date_from" class="form-label">С даты:</label>
+      <input type="date" name="date_from" class="form-control" value="{{ filters.date_from }}">
+    </div>
+    <div class="col-md-3">
+      <label for="date_to" class="form-label">По дату:</label>
+      <input type="date" name="date_to" class="form-control" value="{{ filters.date_to }}">
+    </div>
+    <div class="col-md-3">
+      <label for="category" class="form-label">Категория:</label>
+      <select name="category" class="form-select">
+        <option value="all">Все</option>
+        {% for cat in categories %}
+          <option value="{{ cat.id }}" {% if filters.category == cat.id|stringformat:"s" %}selected{% endif %}>
+            {{ cat.name }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label for="type" class="form-label">Тип:</label>
+      <select name="type" class="form-select">
+        <option value="">Все</option>
+        <option value="income" {% if filters.type == 'income' %}selected{% endif %}>Доход</option>
+        <option value="expense" {% if filters.type == 'expense' %}selected{% endif %}>Расход</option>
+      </select>
+    </div>
+    <div class="col-12 mt-2">
+      <button type="submit" class="btn btn-primary">Фильтровать</button>
+      <a href="{% url 'transaction_list' %}" class="btn btn-secondary">Сбросить</a>
+    </div>
+  </form>
+
+  {% if transactions %}
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th>Дата</th>
+        <th>Тип</th>
+        <th>Сумма</th>
+        <th>Категория</th>
+        <th>Описание</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for t in transactions %}
+      <tr>
+        <td>{{ t.date }}</td>
+        <td>
+          {% if t.type == 'income' %}
+            <span class="text-success">Доход</span>
+          {% else %}
+            <span class="text-danger">Расход</span>
+          {% endif %}
+        </td>
+        <td>{{ t.amount|floatformat:0 }} ₽</td>
+        <td>{{ t.category.name }}</td>
+        <td>{{ t.description|default:"—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p>Нет операций</p>
+  {% endif %}
+</div>
+{% endblock %}

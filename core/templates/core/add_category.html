@@ -1,0 +1,15 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>➕ Добавить категорию</h2>
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="name" class="form-label">Название категории</label>
+      <input type="text" name="name" id="name" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="{% url 'category_list' %}" class="btn btn-secondary">Назад</a>
+  </form>
+</div>
+{% endblock %}

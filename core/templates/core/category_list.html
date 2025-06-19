@@ -1,0 +1,23 @@
+{% extends "core/base.html" %}
+{% block content %}
+<div class="container mt-4">
+  <h2>📂 Мои категории</h2>
+
+  {% if categories %}
+    <ul class="list-group mb-4">
+      {% for cat in categories %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ cat.name }}
+<a href="{% url 'delete_category' cat.id %}" class="btn btn-sm btn-outline-danger"
+   onclick="return confirm('Удалить категорию {{ cat.name }}?');">🗑️</a>
+
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>У вас пока нет категорий.</p>
+  {% endif %}
+
+  <a href="{% url 'add_category' %}" class="btn btn-success">➕ Добавить категорию</a>
+</div>
+{% endblock %}
